@@ -31,9 +31,9 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-800 to-blue-400 flex items-center justify-center p-6">
-      <div className="max-w-md w-full p-6 bg-white rounded-md shadow-md">
-        <h1 className="text-3xl font-bold text-center text-blue-500 mb-6">
+    <div className="min-h-screen bg-white flex items-center justify-center p-6">
+      <div className="max-w-md w-full p-6 bg-white rounded-md shadow-md shadow-gray-300">
+        <h1 className="text-3xl font-bold text-center text-orange-500 mb-6">
           Admin Login
         </h1>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -63,7 +63,7 @@ export default function Login() {
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white font-bold py-2 rounded-md hover:bg-blue-700 transition"
+            className="w-full bg-orange-500 text-white font-bold py-2 rounded-md hover:bg-orange-600 transition"
           >
             Login
           </button>

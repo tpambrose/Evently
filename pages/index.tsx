@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import localFont from "next/font/local";
 
 const geistSans = localFont({
@@ -13,7 +12,6 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
-// Define an interface for the Event type
 interface Event {
   _id: string;
   title: string;
@@ -27,7 +25,6 @@ const Home: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch events when the component mounts
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -42,7 +39,6 @@ const Home: React.FC = () => {
     fetchEvents();
   }, []);
 
-  // Function to handle seat booking
   const handleBooking = async (eventId: string) => {
     setLoading(true);
     setError(null);
@@ -72,57 +68,59 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-800 to-blue-400 flex flex-col items-center justify-center px-6">
-      {/* Header */}
-      <header className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-white mb-4">Available Events</h1>
-        <p className="text-lg text-white">
-          Explore events and book your spot today!
-        </p>
-      </header>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-6 py-10">
 
-      {/* Error Message */}
-      {error && <p className="text-red-500">{error}</p>}
+      {/* Main Container */}
+      <div className="bg-white shadow-md rounded-lg p-10 max-w-4xl w-full mt-8">
+        {/* Header */}
+        <header className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-orange-500 mb-4">Available Events</h1>
+          <p className="text-lg text-gray-700">Discover and book your next event!</p>
+        </header>
 
-      {/* Main Content */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {events.length > 0 ? (
-          events.map((event) => (
-            <div
-              key={event._id}
-              className="border p-4 rounded-md shadow-md bg-white"
-            >
-              <h2 className="text-2xl font-bold mb-2">{event.title}</h2>
-              <p className="text-gray-700 mb-2">{event.description}</p>
-              <p className="text-gray-600 mb-2">
-                <strong>Date:</strong>{" "}
-                {new Date(event.date).toLocaleDateString()}
-              </p>
-              <p className="text-gray-600 mb-4">
-                <strong>Seats Available:</strong> {event.availableSeats}
-              </p>
-              <button
-                onClick={() => handleBooking(event._id)}
-                disabled={loading || event.availableSeats <= 0}
-                className={`w-full bg-blue-600 text-white font-bold py-2 rounded-md ${
-                  event.availableSeats > 0
-                    ? "hover:bg-blue-700"
-                    : "opacity-50 cursor-not-allowed"
-                }`}
+        {/* Error Message */}
+        {error && <p className="text-red-500 text-center">{error}</p>}
+
+        {/* Main Content */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {events.length > 0 ? (
+            events.map((event) => (
+              <div
+                key={event._id}
+                className="border border-gray-200 p-4 rounded-lg shadow-sm bg-white"
               >
-                {loading
-                  ? "Booking..."
-                  : event.availableSeats > 0
-                  ? "Book Now"
-                  : "Sold Out"}
-              </button>
-            </div>
-          ))
-        ) : (
-          <p className="text-center text-gray-500">
-            No events available at the moment.
-          </p>
-        )}
+                <h2 className="text-2xl font-semibold text-orange-500 mb-2">{event.title}</h2>
+                <p className="text-gray-700 mb-2">{event.description}</p>
+                <p className="text-gray-600 mb-2">
+                  <strong>Date:</strong>{" "}
+                  {new Date(event.date).toLocaleDateString()}
+                </p>
+                <p className="text-gray-600 mb-4">
+                  <strong>Seats Available:</strong> {event.availableSeats}
+                </p>
+                <button
+                  onClick={() => handleBooking(event._id)}
+                  disabled={loading || event.availableSeats <= 0}
+                  className={`w-full bg-orange-500 text-white font-semibold py-2 rounded-lg ${
+                    event.availableSeats > 0
+                      ? "hover:bg-orange-600"
+                      : "opacity-50 cursor-not-allowed"
+                  }`}
+                >
+                  {loading
+                    ? "Booking..."
+                    : event.availableSeats > 0
+                    ? "Book Now"
+                    : "Sold Out"}
+                </button>
+              </div>
+            ))
+          ) : (
+            <p className="text-center text-black font-semibold">
+              No events available at the moment.
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );

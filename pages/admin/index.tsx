@@ -7,7 +7,7 @@ interface Event {
   _id: string;
   title: string;
   description: string;
-  date: string; // Consider changing to Date if needed
+  date: string;
   availableSeats: number;
 }
 
@@ -17,34 +17,34 @@ export default function AdminDashboard() {
   const [description, setDescription] = useState<string>("");
   const [date, setDate] = useState<string>("");
   const [availableSeats, setAvailableSeats] = useState<number>(0);
-  const [editingEventId, setEditingEventId] = useState<string | null>(null); // State to hold the ID of the event being edited
+  const [editingEventId, setEditingEventId] = useState<string | null>(null);
 
   const router = useRouter();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
-      router.push("/"); // blueirect to login if no token
+      router.push("/");
     } else {
       try {
-        const decoded: { exp: number } = jwtDecode(token); // Decode the token
-        const currentTime = Date.now() / 1000; // Current time in seconds
+        const decoded: { exp: number } = jwtDecode(token);
+        const currentTime = Date.now() / 1000;
 
         if (decoded.exp < currentTime) {
-          router.push("/login"); // blueirect if token is expiblue
+          router.push("/login");
         } else {
-          fetchEvents(); // Fetch events if token is valid
+          fetchEvents();
         }
       } catch (error) {
         console.error("Token decoding failed:", error);
-        router.push("/"); // blueirect on error
+        router.push("/");
       }
     }
   }, [router]);
 
   const fetchEvents = async () => {
     const res = await fetch("/api/events");
-    const data: Event[] = await res.json(); // Specify the type of data fetched
+    const data: Event[] = await res.json();
     setEvents(data);
   };
 
@@ -63,32 +63,31 @@ export default function AdminDashboard() {
       body: JSON.stringify({ title, description, date, availableSeats }),
     });
     fetchEvents();
-    resetForm(); // Reset form after adding
+    resetForm();
   };
 
   const handleEditEvent = async (eventId: string) => {
-    // Find the event to edit
     const eventToEdit = events.find((event) => event._id === eventId);
     if (eventToEdit) {
       setTitle(eventToEdit.title);
       setDescription(eventToEdit.description);
       setDate(eventToEdit.date);
       setAvailableSeats(eventToEdit.availableSeats);
-      setEditingEventId(eventId); // Set the editing event ID
+      setEditingEventId(eventId);
     }
   };
 
   const handleUpdateEvent = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await fetch(`/api/events/${editingEventId}`, {
-      method: "PUT", // Use PUT method to update
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ title, description, date, availableSeats }),
     });
     fetchEvents();
-    resetForm(); // Reset form after updating
+    resetForm();
   };
 
   const handleDeleteEvent = async (eventId: string) => {
@@ -103,13 +102,13 @@ export default function AdminDashboard() {
     setDescription("");
     setDate("");
     setAvailableSeats(0);
-    setEditingEventId(null); // Reset the editing state
+    setEditingEventId(null);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-800 to-blue-400 flex items-center justify-center p-6">
-      <div className="container max-w-4xl mx-auto bg-white rounded-md shadow-md p-6">
-        <h1 className="text-3xl font-bold text-center text-blue-800 mb-6">
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
+      <div className="container max-w-4xl mx-auto bg-white rounded-md shadow-lg p-6">
+        <h1 className="text-3xl font-bold text-center text-orange-500 mb-6">
           Admin Dashboard
         </h1>
 
@@ -154,7 +153,7 @@ export default function AdminDashboard() {
           </div>
           <button
             type="submit"
-            className="bg-blue-800 text-white font-bold py-2 px-4 rounded hover:bg-blue-800 transition"
+            className="bg-orange-500 text-white font-bold py-2 px-4 rounded hover:bg-orange-600 transition"
           >
             {editingEventId ? "Update Event" : "Add Event"}
           </button>
@@ -162,7 +161,7 @@ export default function AdminDashboard() {
             <button
               type="button"
               onClick={resetForm}
-              className="bg-gray-600 text-white font-bold py-2 px-4 rounded ml-2 hover:bg-gray-700 transition"
+              className="bg-gray-500 text-white font-bold py-2 px-4 rounded ml-2 hover:bg-gray-600 transition"
             >
               Cancel
             </button>
@@ -172,7 +171,7 @@ export default function AdminDashboard() {
         <h2 className="text-xl font-bold mb-4">Existing Events</h2>
         <ul className="space-y-4">
           {events.map((event) => (
-            <li key={event._id} className="border border-gray-300 rounded p-4">
+            <li key={event._id} className="border border-gray-300 rounded p-4 shadow-md">
               <h3 className="text-lg font-bold">{event.title}</h3>
               <p>{event.description}</p>
               <p>Date: {new Date(event.date).toLocaleDateString()}</p>
@@ -180,13 +179,13 @@ export default function AdminDashboard() {
               <div className="flex space-x-2">
                 <button
                   onClick={() => handleEditEvent(event._id)}
-                  className="bg-blue-600 text-white font-bold py-1 px-3 rounded hover:bg-blue-700 transition"
+                  className="bg-orange-500 text-white font-bold py-1 px-3 rounded hover:bg-orange-600 transition"
                 >
                   Edit
                 </button>
                 <button
                   onClick={() => handleDeleteEvent(event._id)}
-                  className="bg-blue-600 text-white font-bold py-1 px-3 rounded hover:bg-blue-700 transition"
+                  className="bg-orange-500 text-white font-bold py-1 px-3 rounded hover:bg-orange-600 transition"
                 >
                   Delete
                 </button>
@@ -196,7 +195,7 @@ export default function AdminDashboard() {
         </ul>
         <button
           onClick={logout}
-          className="bg-blue-600 text-white font-bold py-2 px-4 rounded mt-4 hover:bg-blue-700 transition"
+          className="bg-orange-500 text-white font-bold py-2 px-4 rounded mt-4 hover:bg-orange-600 transition"
         >
           Log out
         </button>
